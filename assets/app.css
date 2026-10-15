@@ -1,0 +1,16 @@
+/*
+ * Tailwind source. Lives outside static/ on purpose: collectstatic's manifest
+ * storage would try to resolve `@import "tailwindcss"` as a file and fail.
+ * Built to static/dist/app.css by `npm run build`.
+ */
+@import "tailwindcss" source(none);
+@source "../templates";
+@source "../static/js";
+@plugin "@tailwindcss/typography";
+
+/* Dark mode follows the .dark class Alpine toggles on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+[x-cloak] {
+  display: none !important;
+}

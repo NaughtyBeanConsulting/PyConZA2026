@@ -1,0 +1,18 @@
+{% load static %}<!doctype html>
+{# Rendered without a request or context processors, so it can't extend base.html. #}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Something went wrong</title>
+  <link rel="stylesheet" href="{% static 'dist/app.css' %}">
+</head>
+<body class="bg-white text-stone-800">
+  <section class="mx-auto max-w-xl px-4 py-24 text-center">
+    <p class="text-sm font-semibold text-emerald-700">500</p>
+    <h1 class="mt-2 text-3xl font-bold tracking-tight">Something went wrong</h1>
+    <p class="mt-4 text-stone-600">We've hit an unexpected error. Please try again in a moment.</p>
+    <a href="/" class="mt-8 inline-block rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700">Back to the blog</a>
+  </section>
+</body>
+</html>
