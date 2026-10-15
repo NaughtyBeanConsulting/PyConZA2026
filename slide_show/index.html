@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Now Ship It · PyCon ZA 2026</title>
+  <meta name="description" content="Deploying a Python web app to any Ubuntu server: the building blocks under every cloud. PyCon ZA 2026.">
+  <link rel="stylesheet" href="vendor/reveal/reset.css">
+  <link rel="stylesheet" href="vendor/reveal/reveal.css">
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+
+<!-- Icon sprite (original line icons) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="3.5" width="18" height="7" rx="2"/><rect x="3" y="13.5" width="18" height="7" rx="2"/><path d="M7 7h.01M7 17h.01M11 7h6M11 17h6"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-door" viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3M12 14.5v2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></symbol>
+  <symbol id="i-restart" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8"/></symbol>
+  <symbol id="i-loop" viewBox="0 0 24 24"><path d="M7 8.5c-2 0-3.5 1.6-3.5 3.5S5 15.5 7 15.5c3.5 0 6.5-7 10-7 2 0 3.5 1.6 3.5 3.5s-1.5 3.5-3.5 3.5c-3.5 0-6.5-7-10-7z"/></symbol>
+  <symbol id="i-browser" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M6.5 6.5h.01M9 6.5h.01"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5.5l-3 13"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol>
+</svg>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ===================================================================== 1. TITLE -->
+<section>
+  <div class="wrap">
+    <div class="kicker">PyCon ZA 2026</div>
+    <h1 style="font-size:3.1em; margin-bottom:.15em">
+      <span class="title-strike">It works on my machine.</span>
+      <span class="title-ship grad">Now ship it.</span>
+    </h1>
+    <p class="lede" style="max-width:34em">Deploying a Python web app to any Ubuntu server: the building blocks hiding under every cloud.</p>
+
+    <svg class="journey-svg" viewBox="0 0 1400 230" role="img" aria-label="A request travelling from a laptop, through DNS, a firewall, nginx, gunicorn and Django, to a server">
+      <defs>
+        <linearGradient id="g-route" gradientUnits="userSpaceOnUse" x1="255" y1="0" x2="1150" y2="0"><stop offset="0" stop-color="#4d8dff"/><stop offset=".55" stop-color="#1cc77f"/><stop offset="1" stop-color="#ffb81c"/></linearGradient>
+      </defs>
+      <g transform="translate(30 50)" stroke="#e9edf6" stroke-width="3" fill="none" stroke-linejoin="round">
+        <rect x="22" y="0" width="150" height="98" rx="10"/>
+        <path d="M0 112h194l-12 14H12z"/>
+        <path d="M50 30h62M50 50h92M50 70h40" stroke="#5d6a86"/>
+      </g>
+      <path class="path" d="M255 120 H1150" stroke="url(#g-route)" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <g font-family="Inter, sans-serif" font-size="19" font-weight="600" fill="#9ba7c0" text-anchor="middle">
+        <g><circle cx="400" cy="120" r="11" fill="#090e1c" stroke="#4d8dff" stroke-width="4"/><text x="400" y="168">DNS</text></g>
+        <g><circle cx="560" cy="120" r="11" fill="#090e1c" stroke="#3fa6d6" stroke-width="4"/><text x="560" y="168">Firewall</text></g>
+        <g><circle cx="720" cy="120" r="11" fill="#090e1c" stroke="#1cc77f" stroke-width="4"/><text x="720" y="168">nginx + HTTPS</text></g>
+        <g><circle cx="880" cy="120" r="11" fill="#090e1c" stroke="#8cc24d" stroke-width="4"/><text x="880" y="168">gunicorn</text></g>
+        <g><circle cx="1040" cy="120" r="11" fill="#090e1c" stroke="#ffb81c" stroke-width="4"/><text x="1040" y="168">Django</text></g>
+      </g>
+      <circle r="8" fill="#fff"><animateMotion dur="3.4s" repeatCount="indefinite" path="M255 120 H1150"/></circle>
+      <circle r="6" fill="#ffd43b"><animateMotion dur="3.4s" begin="1.7s" repeatCount="indefinite" path="M255 120 H1150"/></circle>
+      <g transform="translate(1180 38)" fill="none" stroke="#e9edf6" stroke-width="3">
+        <rect x="0" y="0" width="170" height="44" rx="8"/><rect x="0" y="56" width="170" height="44" rx="8"/><rect x="0" y="112" width="170" height="44" rx="8"/>
+        <path d="M22 22h.01M22 78h.01M22 134h.01" stroke="#1cc77f" stroke-width="7" stroke-linecap="round"/>
+        <path d="M60 22h88M60 78h88M60 134h88" stroke="#5d6a86"/>
+      </g>
+      <text x="1265" y="222" font-family="Inter, sans-serif" font-size="19" font-weight="600" fill="#9ba7c0" text-anchor="middle">Ubuntu VM</text>
+    </svg>
+
+    <div class="byline" style="margin-top:8px">
+      <span style="color:#fff; font-weight:600">Shaun De Ponte</span><span class="sep"></span>
+      <span>NaughtyBean Consulting</span><span class="sep"></span>
+      <span>za.pycon.org</span>
+    </div>
+  </div>
+  <aside class="notes">
+    [0:00 → 0:30] Hi, I'm Shaun. Every one of us has said "it works on my machine". Today is about the next sentence: now ship it.
+    No single cloud provider in this talk. Just the building blocks you'll find underneath all of them.
+  </aside>
+</section>
+
+<!-- ===================================================================== 2. YOU BUILT IT -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Where we start</div>
+    <h2>You built something <em>awesome</em>.</h2>
+    <div class="cols-4" style="margin:26px 0 40px">
+      <div class="card"><h3>Django</h3><p>Batteries included</p></div>
+      <div class="card"><h3>Flask</h3><p>Small and flexible</p></div>
+      <div class="card"><h3>FastAPI</h3><p>Type hints in, APIs out</p></div>
+      <div class="card"><h3>Sanic</h3><p>Async, built for speed</p></div>
+    </div>
+    <div class="row">
+      <div class="frame term" style="width:820px">
+        <div class="bar"><i></i><i></i><i></i><span>terminal</span></div>
+        <pre style="border:0; border-radius:0; font-size:.6em"><code class="language-bash" data-trim>
+$ python manage.py runserver
+Starting development server at http://127.0.0.1:8000/
+        </code></pre>
+      </div>
+      <p class="grow fragment" style="font: 600 1.15em/1.25 var(--head); color:#fff; margin:0">It runs beautifully…<br><span class="muted">on exactly one computer.</span></p>
+    </div>
+  </div>
+  <aside class="notes">
+    [0:30 → 1:15] Quick show of hands: who has a side project that only lives on localhost:8000?
+    Django, Flask, FastAPI, Sanic: it doesn't matter. Building the app is the part we practise. Shipping it is the part we google at 11pm.
+  </aside>
+</section>
+
+<!-- ===================================================================== 3. NOW WHAT? -->
+<section>
+  <div class="wrap">
+    <div class="cloud">
+      <div class="big">…now what?</div>
+      <div class="q fragment pop" style="left:2%; top:4%"><span style="--r:-3deg">Where does it actually <b>run</b>?</span></div>
+      <div class="q fragment pop" style="right:3%; top:2%"><span style="--r:2deg">How do I keep it <b>running</b>?</span></div>
+      <div class="q fragment pop" style="left:0%; top:38%"><span style="--r:2deg">What happens to my <b>.env</b> file?</span></div>
+      <div class="q fragment pop" style="right:0%; top:35%"><span style="--r:-2deg">How do I get <b>HTTPS</b>?</span></div>
+      <div class="q fragment pop" style="left:6%; bottom:14%"><span style="--r:-1.5deg">Who serves the <b>static files</b>?</span></div>
+      <div class="q fragment pop" style="right:5%; bottom:16%"><span style="--r:3deg"><b>Dev</b> settings vs <b>prod</b> settings?</span></div>
+      <div class="q fragment pop" style="left:30%; top:-2%"><span style="--r:1deg">How do I <b>redeploy</b> without fear?</span></div>
+      <div class="q fragment pop" style="left:31%; bottom:0%"><span style="--r:-2deg">…and my <b>background workers</b>?!</span></div>
+    </div>
+  </div>
+  <aside class="notes">
+    [1:15 → 2:30] Click through the questions; each one is a rabbit hole.
+    Where does it run? How do I keep it running when I close my laptop? What happens to my .env? HTTPS? Static files? Dev vs prod settings? Redeploys? Background workers?
+    This is the moment most of us open forty browser tabs.
+  </aside>
+</section>
+
+<!-- ===================================================================== 4. TUTORIAL MAZE -->
+<section>
+  <div class="wrap">
+    <div class="kicker">The internet's answer</div>
+    <h2>Forty tabs. Nine tutorials. Zero clarity.</h2>
+    <div class="cols-3 tut" style="margin-top:34px">
+      <div class="card"><div class="meta">Blog post · 2019</div><div class="t">"Deploy Django in five minutes"</div><p>Step 1 of 14: create an account with our cloud. Step 2: click the blue button. Step 3: …</p></div>
+      <div class="card"><div class="meta">Video · 47 min</div><div class="t">"Just use this Dockerfile"</div><p>Copy, paste, hope. Nobody explains what's inside, or why.</p></div>
+      <div class="card"><div class="meta">Forum · marked solved</div><div class="t">"Works on AWS, but…"</div><p>Every guide covers one piece, on one provider, with a different name for the same thing.</p></div>
+    </div>
+    <p class="fragment" style="margin-top:56px; font: 600 1.05em/1.3 var(--head); color:#fff">Every guide teaches the <span class="gold">buttons</span>. Few explain the <span class="green">machine</span>.</p>
+  </div>
+  <aside class="notes">
+    [2:30 → 3:30] The tutorials aren't wrong; they're disjointed. One explains gunicorn, another nginx, a third SSL, each on a different provider.
+    You end up with a working deploy you're scared to touch, because you don't know how the pieces connect.
+  </aside>
+</section>
+
+<!-- ===================================================================== 5. BIG IDEA -->
+<section>
+  <div class="wrap center-x">
+    <div class="kicker">The secret</div>
+    <h1 style="font-size:3em; max-width:13em">The cloud is just someone else's <span class="grad">Ubuntu</span>.</h1>
+    <p class="lede" style="max-width:32em; margin:0 auto 36px">Different dashboards, different invoices, the same building blocks underneath. Learn the blocks once and you can deploy anywhere.</p>
+    <div class="chips" style="justify-content:center">
+      <span class="chip"><i style="background:var(--sun)"></i>AWS</span>
+      <span class="chip"><i style="background:var(--sky)"></i>Azure</span>
+      <span class="chip"><i style="background:#3fa6d6"></i>DigitalOcean</span>
+      <span class="chip"><i style="background:var(--flame)"></i>Hetzner</span>
+      <span class="chip"><i style="background:var(--leaf)"></i>A VM on your laptop</span>
+    </div>
+  </div>
+  <aside class="notes">
+    [3:30 → 4:15] This is the whole talk in one sentence. Strip away the dashboards and you rent a Linux computer: usually Ubuntu, with networking, a disk and an IP address.
+    Everything I show today ran on a VM on my laptop, and it would work the same on any of these.
+  </aside>
+</section>
+
+<!-- ===================================================================== 6. BUILDING BLOCKS -->
+<section>
+  <div class="wrap">
+    <div class="kicker">The building blocks</div>
+    <h2>Ten pieces. Every deployment.</h2>
+    <div class="cols-5" style="margin-top:30px">
+      <div class="card"><div class="icon gold"><svg><use href="#i-server"/></svg></div><h3>Ubuntu server</h3><p>The computer you rent</p></div>
+      <div class="card"><div class="icon blue"><svg><use href="#i-shield"/></svg></div><h3>Firewall</h3><p>Which doors are open</p></div>
+      <div class="card"><div class="icon blue"><svg><use href="#i-globe"/></svg></div><h3>DNS</h3><p>A name that points to your server</p></div>
+      <div class="card"><div class="icon green"><svg><use href="#i-door"/></svg></div><h3>Web server</h3><p>nginx, the front door</p></div>
+      <div class="card"><div class="icon green"><svg><use href="#i-lock"/></svg></div><h3>HTTPS</h3><p>Certificates and the padlock</p></div>
+      <div class="card"><div class="icon gold"><svg><use href="#i-play"/></svg></div><h3>App server</h3><p>gunicorn runs your Python</p></div>
+      <div class="card"><div class="icon gold"><svg><use href="#i-restart"/></svg></div><h3>systemd</h3><p>Keeps it alive, starts it on boot</p></div>
+      <div class="card"><div class="icon red"><svg><use href="#i-key"/></svg></div><h3>Environment</h3><p>Secrets and settings, outside git</p></div>
+      <div class="card"><div class="icon blue"><svg><use href="#i-db"/></svg></div><h3>Database</h3><p>PostgreSQL, kept private</p></div>
+      <div class="card"><div class="icon red"><svg><use href="#i-loop"/></svg></div><h3>CI/CD</h3><p>Shipping, made boring</p></div>
+    </div>
+  </div>
+  <aside class="notes">
+    [4:15 → 5:30] Here's the map for the rest of the talk. Ten blocks. Every Python web deployment I've done in years uses all ten, whatever the provider.
+    We'll meet each one in order, on a real server.
+  </aside>
+</section>
+
+<!-- ===================================================================== 7. FOLLOW ONE REQUEST -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Follow one request</div>
+    <h2>What happens when someone visits?</h2>
+    <div class="journey">
+      <div class="packet"></div>
+      <div class="stop fragment lit"><div class="badge" style="color:var(--sky)"><svg><use href="#i-browser"/></svg></div><h3>Browser</h3><p>Someone types your address</p></div>
+      <div class="stop fragment lit"><div class="badge" style="color:var(--sky)"><svg><use href="#i-globe"/></svg></div><h3>DNS</h3><p>Turns the name into an IP address</p></div>
+      <div class="stop fragment lit"><div class="badge" style="color:#3fa6d6"><svg><use href="#i-shield"/></svg></div><h3>Firewall</h3><p>Only ports 80 and 443 get in</p></div>
+      <div class="stop fragment lit"><div class="badge" style="color:var(--leaf)"><svg><use href="#i-lock"/></svg></div><h3>nginx</h3><p>Handles HTTPS, passes the rest on</p></div>
+      <div class="stop fragment lit"><div class="badge" style="color:#8cc24d"><svg><use href="#i-play"/></svg></div><h3>gunicorn</h3><p>Python workers, waiting for work</p></div>
+      <div class="stop fragment lit"><div class="badge" style="color:var(--sun)"><svg><use href="#i-code"/></svg></div><h3>Django</h3><p>Your views, templates and admin</p></div>
+      <div class="stop fragment lit"><div class="badge" style="color:var(--flame)"><svg><use href="#i-db"/></svg></div><h3>PostgreSQL</h3><p>Only reachable from inside</p></div>
+    </div>
+    <p class="fragment" style="margin-top:56px; color:var(--muted)">Every box is a separate program with its own job. <strong>When something breaks, it breaks at one of these stops.</strong></p>
+  </div>
+  <aside class="notes">
+    [5:30 → 7:00] Step through each stop. Browser asks DNS for the address. The firewall only lets web traffic in. nginx terminates HTTPS and forwards the request to gunicorn on a private port. gunicorn hands it to a Python worker running Django, and Django talks to Postgres, which nobody outside can reach.
+    Remember this line; the rest of the talk builds it, stop by stop.
+  </aside>
+</section>
+
+<!-- ===================================================================== 8. DIVIDER: THE APP -->
+<section class="divider">
+  <div class="wrap">
+    <div class="num">01</div>
+    <div class="kicker">Part one</div>
+    <h1 style="font-size:3.3em">Meet the app</h1>
+    <p class="lede">A tiny CMS blog, built the way you'd build a real one.</p>
+  </div>
+  <aside class="notes">[7:00 → 7:15] First, what we're deploying.</aside>
+</section>
+
+<!-- ===================================================================== 9. MEET THE APP -->
+<section>
+  <div class="wrap">
+    <div class="row top">
+      <div style="width:560px; flex:none">
+        <div class="kicker">The demo</div>
+        <h2 style="font-size:1.85em">A small CMS blog</h2>
+        <div class="chips" style="margin:6px 0 30px">
+          <span class="chip"><i></i>Django 6.1</span><span class="chip"><i style="background:var(--sky)"></i>htmx</span>
+          <span class="chip"><i style="background:#38bdf8"></i>Tailwind CSS</span><span class="chip"><i style="background:#77c1d2"></i>Alpine.js</span>
+          <span class="chip"><i style="background:#4d8dff"></i>PostgreSQL</span><span class="chip"><i style="background:var(--sun)"></i>Unfold admin</span>
+          <span class="chip"><i style="background:var(--flame)"></i>WhiteNoise</span><span class="chip"><i style="background:var(--py)"></i>python-dotenv</span>
+        </div>
+        <p class="muted small">Search-as-you-type and "load more" with htmx. Dark mode with Alpine. Editors log in with their <strong>email</strong>, not a username.</p>
+      </div>
+      <div class="grow" style="position:relative; height:600px">
+        <figure class="frame" style="position:absolute; left:0; top:0; width:760px">
+          <div class="bar"><i></i><i></i><i></i><span>The blog</span></div>
+          <img src="img/blog-home.webp" alt="The demo blog's home page: post cards with search and a load more button">
+        </figure>
+        <figure class="frame fragment" style="position:absolute; right:-30px; top:250px; width:430px">
+          <div class="bar"><i></i><i></i><i></i><span>The admin</span></div>
+          <img src="img/blog-admin-login.webp" alt="Django admin login styled with Unfold, asking for an email address">
+        </figure>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    [7:15 → 8:15] Deliberately ordinary: Django, htmx, Tailwind, Alpine, Postgres, the admin styled with Unfold, and WhiteNoise for static files.
+    Ordinary is good: the deployment story is identical for Flask or FastAPI. Swap gunicorn's target and you're done.
+  </aside>
+</section>
+
+<!-- ===================================================================== 10. DEV VS PROD -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Dev vs prod</div>
+    <h2>One codebase. Two lives.</h2>
+    <div class="cols-3" style="margin-top:30px">
+      <div class="card accent"><p class="tiny" style="font-family:var(--mono); color:var(--sun); margin-bottom:12px">settings/base.py</p><h3>Shared</h3><p>Apps, database, auth, static files: everything both worlds agree on.</p></div>
+      <div class="card good fragment"><p class="tiny" style="font-family:var(--mono); color:var(--leaf); margin-bottom:12px">settings/development.py</p><h3>Forgiving</h3><p>DEBUG on. Emails print to the console. Static files served straight from disk.</p></div>
+      <div class="card bad fragment"><p class="tiny" style="font-family:var(--mono); color:var(--flame); margin-bottom:12px">settings/production.py</p><h3>Strict</h3><p>DEBUG off. Secrets required. HTTPS everywhere. Compressed, cache-forever static files.</p></div>
+    </div>
+    <p class="fragment" style="margin-top:48px">Same code on every machine. Only one variable changes: <code>DJANGO_SETTINGS_MODULE</code></p>
+  </div>
+  <aside class="notes">
+    [8:15 → 9:15] Split settings.py into a package: base, development, production. Development and production each import base and override what differs.
+    Production is strict on purpose: if the secret key or allowed hosts are missing it refuses to start, which is much better than starting insecurely.
+  </aside>
+</section>
+
+<!-- ===================================================================== 11. SECRETS -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Environment variables</div>
+    <h2>Code goes in git. Secrets don't.</h2>
+    <div class="row top" style="margin-top:22px; gap:56px">
+      <div class="grow">
+        <div class="card fragment lit" style="margin-bottom:16px"><h3><code>.env</code> stays on the server</h3><p>Database passwords, the secret key, the hostnames. Never committed.</p></div>
+        <div class="card fragment lit" style="margin-bottom:16px"><h3><code>.env.example</code> goes in git</h3><p>The same keys with no values: a checklist for the next server.</p></div>
+        <div class="card fragment lit"><h3>The real environment wins</h3><p>python-dotenv never overrides a variable that's already set.</p></div>
+      </div>
+      <div style="width:620px; position:relative">
+        <div class="frame term">
+          <div class="bar"><i></i><i></i><i></i><span>.env.example</span></div>
+          <pre style="border:0; border-radius:0"><code class="language-ini" data-trim>
+DJANGO_SETTINGS_MODULE=app.settings.production
+DJANGO_SECRET_KEY=change-me
+ALLOWED_HOSTS=pycon.za
+CSRF_TRUSTED_ORIGINS=https://pycon.za
+DB_NAME=pycon
+DB_USER=pycon
+DB_PASSWORD=
+DB_HOST=127.0.0.1
+          </code></pre>
+        </div>
+        <div class="note green fragment" style="right:-30px; bottom:-90px"><b>Lesson learned</b>The app and Postgres share a server, so it's 127.0.0.1, not the server's network IP.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    [9:15 → 10:15] Three rules. The .env never goes in git. A .env.example with empty values does. And real environment variables beat the file, so your platform or CI can override anything.
+    The sticky note is a real mistake from preparing this talk: I pointed DB_HOST at the server's own network address and Postgres rejected it. More of those in the museum later.
+  </aside>
+</section>
+
+<!-- ===================================================================== 12. DIVIDER: THE ROUTE -->
+<section class="divider">
+  <div class="wrap">
+    <div class="num">02</div>
+    <div class="kicker">Part two</div>
+    <h1 style="font-size:3.1em; max-width:10em">From fresh VM to production</h1>
+    <p class="lede" style="margin-bottom:34px">Ten stops on one route. Works on any provider.</p>
+    <div class="chips" style="max-width:1100px">
+      <span class="chip">1 · VM</span><span class="chip">2 · Panel</span><span class="chip">3 · Database</span><span class="chip">4 · Python</span><span class="chip">5 · Code</span>
+      <span class="chip">6 · App server</span><span class="chip">7 · systemd</span><span class="chip">8 · Domain</span><span class="chip">9 · HTTPS</span><span class="chip">10 · Ship</span>
+    </div>
+  </div>
+  <aside class="notes">[10:15 → 10:35] Now the route itself. Watch the line at the top of the next slides; it tracks where we are.</aside>
+</section>
+
+<!-- ===================================================================== 13. STOP 1: VM -->
+<section data-stop="1">
+  <div class="wrap">
+    <div class="kicker">Stop 1 · The server</div>
+    <h2>Start with a fresh Ubuntu VM</h2>
+    <div class="cols-4" style="margin-top:34px">
+      <div class="card"><div class="icon gold"><svg><use href="#i-server"/></svg></div><h3>Any provider</h3><p>A cloud VM, a box under your desk, or a VM on your laptop. This talk used one on a laptop.</p></div>
+      <div class="card"><div class="icon green"><svg><use href="#i-cog"/></svg></div><h3>Start small</h3><p>A couple of CPUs and a few GB of RAM run a Django site and its database comfortably.</p></div>
+      <div class="card"><div class="icon blue"><svg><use href="#i-key"/></svg></div><h3>Keys, not passwords</h3><p>Log in with an SSH key. Use a normal user with sudo, not root.</p></div>
+      <div class="card accent"><div class="icon red"><svg><use href="#i-restart"/></svg></div><h3>Choose a supported LTS</h3><p>Newest isn't always best: some tools take a while to support a brand-new Ubuntu release.</p></div>
+    </div>
+  </div>
+  <aside class="notes">
+    [10:35 → 11:20] Any VM with Ubuntu. Mine ran in UTM on my MacBook, which is a great way to rehearse a deploy for free.
+    One real lesson: I started on the very newest Ubuntu, and some of the panel's tools didn't support it yet. Pick the LTS your tools support.
+  </aside>
+</section>
+
+<!-- ===================================================================== 14. STOP 2: PANEL -->
+<section data-stop="2">
+  <div class="wrap">
+    <div class="row top" style="gap:56px">
+      <div style="width:620px; flex:none">
+        <div class="kicker">Stop 2 · A control panel</div>
+        <h2 style="font-size:1.7em">aaPanel: a friendly face for nginx and friends</h2>
+        <p class="muted small" style="margin-top:14px">An open-source, free hosting panel. Optional, but it removes the fiddly bits.</p>
+        <div class="card fragment lit" style="margin:18px 0 14px"><h3>Installs the stack</h3><p>nginx, PostgreSQL, Python, firewall, cron, SSL: with a UI.</p></div>
+        <div class="card fragment lit"><h3>Nothing is hidden</h3><p>Every click writes an ordinary config file. You can still SSH in and read it.</p></div>
+      </div>
+      <figure class="frame grow">
+        <div class="bar"><i></i><i></i><i></i><span>aapanel.com</span></div>
+        <img src="img/aapanel-home.webp" alt="The aaPanel website: an open-source website control panel">
+      </figure>
+    </div>
+  </div>
+  <aside class="notes">
+    [11:20 → 12:05] You can do everything by hand, and I'll point at the underlying pieces as we go. I like a panel because it writes standard nginx and systemd config for me, and I can always inspect it.
+    It's free and open source, and there are alternatives if you prefer them; the blocks are the same.
+  </aside>
+</section>
+
+<!-- ===================================================================== 15. STOP 2: INSTALLED -->
+<section data-stop="2" data-from="2">
+  <div class="wrap">
+    <div class="kicker">Stop 2 · A control panel</div>
+    <h2>One command. Four minutes.</h2>
+    <div style="position:relative; margin-top:22px; width:1150px">
+      <figure class="frame term">
+        <div class="bar"><i></i><i></i><i></i><span>ssh ubuntu-vm</span></div>
+        <img src="img/aapanel-installed.webp" alt="aaPanel installer output: installed successfully, with the login details hidden">
+      </figure>
+      <div class="note fragment" style="right:-250px; top:-20px"><b>Treat it like a password</b>Because it is one. Mine are hidden here; yours go straight into a password manager.</div>
+      <div class="note green fragment" style="right:-200px; bottom:-60px; transform:rotate(2deg)"><b>Ports</b>80 and 443 for everyone. The panel port? Just you.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    [12:05 → 12:50] One copy-paste installer from aapanel.com; four minutes on my VM. It prints the panel address, a username and a password once. I've covered mine, and so should you.
+    Open 80 and 443 to the world. Lock the panel port to your own IP.
+  </aside>
+</section>
+
+<!-- ===================================================================== 16. STOP 3: DATABASE -->
+<section data-stop="3">
+  <div class="wrap">
+    <div class="row top" style="gap:48px">
+      <div style="width:470px; flex:none">
+        <div class="kicker">Stop 3 · The database</div>
+        <h2>PostgreSQL in three clicks</h2>
+        <div class="card fragment lit" style="margin:20px 0 14px"><h3>1 · Install the manager</h3><p>From the panel's app store.</p></div>
+        <div class="card fragment lit" style="margin-bottom:14px"><h3>2 · Pick a version</h3><p>We used PostgreSQL 18. Make a coffee while it builds.</p></div>
+        <div class="card fragment lit"><h3>3 · Create a database + user</h3><p>Let it generate a long password, then put it in <code>.env</code>.</p></div>
+      </div>
+      <div class="fan grow">
+        <figure class="frame"><span class="tag">1</span><div class="bar"><i></i><i></i><i></i><span>App store</span></div><img src="img/pg-manager-appstore.webp" alt="aaPanel app store showing PostgreSQL Manager"></figure>
+        <figure class="frame fragment"><span class="tag">2</span><div class="bar"><i></i><i></i><i></i><span>Installing PostgreSQL 18</span></div><img src="img/pg-installing.webp" alt="PostgreSQL 18 compiling in aaPanel"></figure>
+        <figure class="frame fragment"><span class="tag">3</span><div class="bar"><i></i><i></i><i></i><span>Add database</span></div><img src="img/pg-add-database.webp" alt="Add Database dialog for a database and user called pycon, password hidden"></figure>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    [12:50 → 13:50] Three steps: install the PostgreSQL manager, install a Postgres version, create a database with its own user.
+    One database user per app, with a generated password. That password lives in the server's .env and nowhere else.
+  </aside>
+</section>
+
+<!-- ===================================================================== 17. STOP 3: WHO GETS IN -->
+<section data-stop="3" data-from="3">
+  <div class="wrap">
+    <div class="kicker">Stop 3 · The database</div>
+    <h2>Who's allowed to knock?</h2>
+    <div class="row top" style="gap:44px; margin-top:10px">
+      <figure class="frame" style="width:720px; flex:none">
+        <div class="bar"><i></i><i></i><i></i><span>Client authentication · pg_hba.conf</span></div>
+        <img src="img/pg-hba.webp" alt="PostgreSQL client authentication rules in aaPanel">
+      </figure>
+      <div class="grow">
+        <div class="card good fragment lit" style="margin-bottom:16px"><h3>App → database: localhost</h3><p>Nothing on the internet needs to reach Postgres. Keep it that way.</p></div>
+        <div class="card good fragment lit" style="margin-bottom:16px"><h3>Laptop → database: SSH tunnel</h3><p>DBeaver can connect through SSH. No database port opened at all.</p></div>
+        <div class="card bad fragment lit"><h3>Must open 5432? Be picky</h3><p>One IP address, real passwords (scram-sha-256), a firewall rule. And replace "trust".</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    [13:50 → 14:50] This file decides who may connect, from where, and how they prove it. The defaults trust every connection from inside the server; tighten that once your app has its password.
+    For your own GUI, an SSH tunnel beats opening port 5432. I tried both while preparing; the tunnel worked first time.
+  </aside>
+</section>
+
+<!-- ===================================================================== 18. STOP 4: PYTHON -->
+<section data-stop="4">
+  <div class="wrap">
+    <div class="kicker">Stop 4 · Python</div>
+    <h2>Your Python, not the system's</h2>
+    <p class="muted small" style="max-width:40em">Install the exact version your app needs, next to the one Ubuntu uses for itself. Every project then gets its own virtual environment.</p>
+    <div class="cols-2" style="margin-top:20px">
+      <figure class="frame fragment"><div class="bar"><i></i><i></i><i></i><span>App store · Python Manager</span></div><img src="img/python-manager-appstore.webp" alt="aaPanel app store listing the Python Manager"></figure>
+      <figure class="frame fragment"><div class="bar"><i></i><i></i><i></i><span>Installing Python 3.12</span></div><img src="img/python-installing.webp" alt="Python 3.12 compiling in aaPanel"></figure>
+    </div>
+  </div>
+  <aside class="notes">
+    [14:50 → 15:30] Never pip install into the system Python; Ubuntu needs it for its own tools. Install your version alongside and give each project a virtualenv.
+    Note the warning in the app store: the panel is moving this into Website → Python Project, which is what we use next.
+  </aside>
+</section>
+
+<!-- ===================================================================== 19. STOP 5: CODE -->
+<section data-stop="5">
+  <div class="wrap">
+    <div class="kicker">Stop 5 · Your code</div>
+    <h2>git clone. Then never FTP again.</h2>
+    <figure class="frame term" style="margin:16px 0 34px">
+      <div class="bar"><i></i><i></i><i></i><span>/www/wwwroot</span></div>
+      <img src="img/git-clone.webp" alt="git clone of the PyConZA2026 repository on the server">
+    </figure>
+    <h3 class="fragment" style="color:var(--sun)">What git ignores never arrives:</h3>
+    <div class="cols-3" style="margin-top:12px">
+      <div class="card fragment lit"><h3><code>.env</code></h3><p>Create it on the server, by hand, once.</p></div>
+      <div class="card fragment lit"><h3>Built CSS &amp; JS</h3><p>Build it, then ship it: locally, or in CI.</p></div>
+      <div class="card fragment lit"><h3><code>venv/</code></h3><p>Recreate it from requirements.txt.</p></div>
+    </div>
+  </div>
+  <aside class="notes">
+    [15:30 → 16:10] The server gets your code from git, so updating later is just git pull.
+    The catch, which bit me: anything in .gitignore doesn't exist on the server. My Tailwind build output was ignored, so the first production page load crashed. Exhibit seven later.
+  </aside>
+</section>
+
+<!-- ===================================================================== 20. STOP 6: APP SERVER -->
+<section data-stop="6">
+  <div class="wrap">
+    <div class="row top" style="gap:40px">
+      <div style="position:relative; width:760px; height:640px; flex:none">
+        <figure class="frame" style="position:absolute; left:0; top:0; width:640px">
+          <div class="bar"><i></i><i></i><i></i><span>Python Project manager</span></div>
+          <img src="img/python-project-manager.webp" alt="aaPanel Python project manager with an Add Project button">
+        </figure>
+        <figure class="frame fragment" style="position:absolute; left:400px; top:110px; width:340px">
+          <div class="bar"><i></i><i></i><i></i><span>Add a project</span></div>
+          <img src="img/python-add-project.webp" alt="Add project form: Django, gunicorn, port 8010, run as user www">
+        </figure>
+      </div>
+      <div class="grow">
+        <div class="kicker">Stop 6 · The app server</div>
+        <h2 style="font-size:1.75em">gunicorn: where your Python actually runs</h2>
+        <div class="card fragment lit" style="margin:16px 0 14px"><h3>runserver is for dev</h3><p>gunicorn starts several Python workers and keeps them busy.</p></div>
+        <div class="card fragment lit" style="margin-bottom:14px"><h3>Private port</h3><p>It listens on 127.0.0.1:8010. Only nginx talks to it.</p></div>
+        <div class="card fragment lit"><h3>Its own user</h3><p>Runs as <code>www</code>, never root.</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    [16:10 → 17:10] The project form is gunicorn configuration with a UI: framework, start mode, port, and the user it runs as.
+    Two choices matter most: a private port only nginx can reach, and a non-root user, so a bug in your app can't take over the server.
+  </aside>
+</section>
+
+<!-- ===================================================================== 21. STOP 6: GET READY -->
+<section data-stop="6" data-from="6">
+  <div class="wrap">
+    <div class="kicker">Stop 6 · The app server</div>
+    <h2>Three commands before the first visitor</h2>
+    <div class="row top" style="gap:30px; margin-top:16px; position:relative">
+      <div style="width:760px; flex:none">
+        <p class="small gold" style="margin-bottom:10px; font-weight:600">1 · Create the tables</p>
+        <figure class="frame term"><div class="bar"><i></i><i></i><i></i><span>migrate</span></div><img src="img/migrate.webp" alt="manage.py migrate output, every migration OK"></figure>
+      </div>
+      <div class="grow">
+        <div class="fragment">
+          <p class="small gold" style="margin-bottom:10px; font-weight:600">2 · Gather the static files</p>
+          <figure class="frame term" style="margin-bottom:28px"><div class="bar"><i></i><i></i><i></i><span>collectstatic</span></div><img src="img/collectstatic.webp" alt="collectstatic: 162 files copied, 790 post-processed"></figure>
+        </div>
+        <div class="fragment">
+          <p class="small gold" style="margin-bottom:10px; font-weight:600">3 · Make yourself an admin</p>
+          <figure class="frame term"><div class="bar"><i></i><i></i><i></i><span>createsuperuser</span></div><img src="img/createsuperuser.webp" alt="createsuperuser warning that the password is too short and too common"></figure>
+        </div>
+      </div>
+      <div class="note red fragment" style="right:10px; bottom:-130px"><b>Bypass validation? [y/N]</b>Say N. Always say N. (Do as I say, not as I did.)</div>
+    </div>
+  </div>
+  <aside class="notes">
+    [17:10 → 18:10] migrate builds the tables, collectstatic gathers and fingerprints every static file, createsuperuser makes the admin.
+    Yes, that's my screenshot bypassing password validation on a demo box. Please don't do that on a real server.
+  </aside>
+</section>
+
+<!-- ===================================================================== 22. STOP 6: STATIC FILES -->
+<section data-stop="6" data-from="6">
+  <div class="wrap">
+    <div class="kicker">Stop 6 · Static files</div>
+    <h2>Static files without a CDN</h2>
+    <div class="pipe" style="margin-top:34px">
+      <div class="step fragment lit"><div class="n">Your file</div><h3><code>app.css</code></h3><p>What you wrote</p></div>
+      <div class="step fragment lit"><div class="n">Fingerprinted</div><h3><code>app.a58e12bb.css</code></h3><p>New content means a new name</p></div>
+      <div class="step fragment lit"><div class="n">Pre-compressed</div><h3><code>.br</code> + <code>.gz</code></h3><p>Made once, at deploy time</p></div>
+      <div class="step fragment lit"><div class="n">Cached</div><h3>for a year</h3><p>Browsers never ask twice</p></div>
+    </div>
+    <div class="row" style="margin-top:50px; gap:60px">
+      <p class="grow" style="margin:0">WhiteNoise does all of this from inside Django: <strong>one line of middleware</strong>, no extra server.</p>
+      <div class="card good fragment" style="text-align:center; width:380px; flex:none"><h3 style="font-size:1.25em; margin:0">33 KB → 5.6 KB</h3><p>our stylesheet, Brotli-compressed</p></div>
+    </div>
+  </div>
+  <aside class="notes">
+    [18:10 → 19:00] collectstatic with WhiteNoise's storage gives every file a content hash in its name and pre-compresses it. Because the name changes whenever the content does, browsers can cache it for a year and never serve a stale file.
+    Our 33 KB stylesheet goes over the wire as 5.6 KB.
+  </aside>
+</section>
+
+<!-- ===================================================================== 23. STOP 7: SYSTEMD -->
+<section data-stop="7">
+  <div class="wrap">
+    <div class="kicker">Stop 7 · Keep it alive</div>
+    <h2>systemd: the babysitter</h2>
+    <div class="row top" style="gap:40px; margin-top:12px">
+      <figure class="frame term" style="width:860px; flex:none">
+        <div class="bar"><i></i><i></i><i></i><span>/etc/systemd/system/gunicorn-pycon.service</span></div>
+        <img src="img/systemd-unit.webp" alt="systemd unit file that runs gunicorn as user www on 127.0.0.1:8010">
+      </figure>
+      <div class="grow" style="font-size:.9em">
+        <div class="card fragment lit" style="margin-bottom:12px; padding:18px 22px"><h3><code>User=www</code></h3><p>Never run your app as root</p></div>
+        <div class="card fragment lit" style="margin-bottom:12px; padding:18px 22px"><h3><code>--bind 127.0.0.1</code></h3><p>Only nginx can reach it</p></div>
+        <div class="card fragment lit" style="margin-bottom:12px; padding:18px 22px"><h3><code>Restart=always</code></h3><p>Crashes heal themselves</p></div>
+        <div class="card fragment lit" style="margin-bottom:12px; padding:18px 22px"><h3><code>LogsDirectory=</code></h3><p>Logs get a home (ours didn't)</p></div>
+        <div class="card fragment lit" style="padding:18px 22px"><h3><code>WantedBy=…</code></h3><p>Starts again after a reboot</p></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    [19:00 → 20:00] systemd is Ubuntu's process manager. Fifteen lines turn gunicorn into a service that starts on boot and restarts when it crashes.
+    The LogsDirectory line exists because my first version pointed logs at a folder that didn't exist; gunicorn crashed instantly, and systemd faithfully restarted it thirty-six times.
+  </aside>
+</section>
+
+<!-- ===================================================================== 24. STOP 8: DOMAIN -->
+<section data-stop="8">
+  <div class="wrap">
+    <div class="kicker">Stop 8 · Domain &amp; web server</div>
+    <h2>nginx owns the front door</h2>
+    <div class="cols-3" style="margin-top:20px; width:1330px">
+      <div><figure class="frame"><div class="bar"><i></i><i></i><i></i><span>Domains</span></div><img src="img/site-domains.webp" alt="Site domains: pycon.za and www.pycon.za"></figure><p class="shot-caption">Which names this site answers to</p></div>
+      <div class="fragment"><figure class="frame"><div class="bar"><i></i><i></i><i></i><span>Reverse proxy</span></div><img src="img/site-reverse-proxy.webp" alt="Reverse proxy from / to http://127.0.0.1:8010"></figure><p class="shot-caption">Pass every request on to gunicorn</p></div>
+      <div class="fragment"><figure class="frame"><div class="bar"><i></i><i></i><i></i><span>URL rewrite</span></div><img src="img/site-url-rewrite-media.webp" alt="nginx rule serving /media straight from disk"></figure><p class="shot-caption">Serve uploads straight from disk</p></div>
+    </div>
+  </div>
+  <aside class="notes">
+    [20:00 → 21:00] A site in the panel is an nginx server block. It answers for pycon.za, proxies everything to gunicorn on 8010, and serves user uploads from disk.
+    Point your DNS A record at the server's IP. I used a hosts-file entry, because pycon.za only exists on my laptop.
+    One header in that proxy config cost me an hour; it's in the museum.
+  </aside>
+</section>
+
+<!-- ===================================================================== 25. STOP 9: HTTPS -->
+<section data-stop="9">
+  <div class="wrap">
+    <div class="kicker">Stop 9 · HTTPS</div>
+    <h2>The padlock, two ways</h2>
+    <div class="cols-2" style="margin-top:30px">
+      <div class="card accent fragment lit">
+        <div class="icon gold"><svg><use href="#i-globe"/></svg></div>
+        <h3>Public domain → Let's Encrypt</h3>
+        <p>Free certificates that renew themselves. One click in the panel, as long as the internet can reach your domain.</p>
+      </div>
+      <div class="card good fragment lit">
+        <div class="icon green"><svg><use href="#i-lock"/></svg></div>
+        <h3>Private domain → your own CA</h3>
+        <p>mkcert creates a certificate authority that only your laptop trusts. That's how pycon.za got its padlock here.</p>
+      </div>
+    </div>
+    <div class="chips fragment" style="margin-top:40px">
+      <span class="chip"><i></i>Force HTTPS: on</span>
+      <span class="chip"><i style="background:var(--sun)"></i>HSTS: start with a short max-age</span>
+      <span class="chip"><i style="background:var(--sky)"></i>Certificates expire: let a robot renew them</span>
+    </div>
+  </div>
+  <aside class="notes">
+    [21:00 → 22:00] For a real domain: Let's Encrypt, built into the panel, renewed automatically. It needs the internet to reach your domain to prove you own it.
+    For a private or rehearsal domain like my pycon.za, Let's Encrypt can't help. mkcert makes a tiny certificate authority that only your machine trusts.
+    Either way, turn on Force HTTPS.
+  </aside>
+</section>
+
+<!-- ===================================================================== 26. STOP 10: SHIP -->
+<section data-stop="10">
+  <div class="wrap center-x" style="justify-content:center">
+    <div style="display:inline-flex; align-items:center; gap:22px; padding:22px 38px; border-radius:999px; background:var(--panel-2); border:1px solid var(--line); margin-bottom:46px">
+      <svg viewBox="0 0 24 24" style="width:46px; height:46px; stroke:var(--leaf); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round"><use href="#i-lock"/></svg>
+      <span style="font: 600 1.3em/1 var(--mono); color:#fff">https://pycon.za</span>
+      <span style="font: 700 .75em/1 var(--mono); color:var(--ink); background:var(--leaf); padding:10px 16px; border-radius:999px">200 OK</span>
+    </div>
+    <h1 style="font-size:3.4em" class="grad">It's live.</h1>
+    <p class="lede" style="margin:0 auto">Fresh VM to production in ten stops, with nothing but open-source software.</p>
+  </div>
+  <aside class="notes">
+    [22:00 → 22:30] Pause and let it land. A fresh VM, ten stops, all open source, and you know what every piece does.
+    Now the fun part: everything that broke along the way.
+  </aside>
+</section>
+
+<!-- ===================================================================== 27. ERROR MUSEUM -->
+<section>
+  <div class="wrap top">
+    <div class="kicker" style="color:var(--flame)">The museum of things that broke</div>
+    <h2>Real errors from building this talk</h2>
+    <div class="museum" style="margin-top:14px">
+      <div class="exhibit fragment lit"><div class="no">Exhibit 01</div><div class="err">DNS_PROBE_FINISHED_NXDOMAIN</div><p>The name pointed nowhere yet. <b>Add the DNS record (or hosts entry).</b></p></div>
+      <div class="exhibit fragment lit"><div class="no">Exhibit 02</div><div class="err">ERR_CERT_AUTHORITY_INVALID</div><p>A certificate from a CA the browser didn't trust. <b>Trust the CA, or use Let's Encrypt.</b></p></div>
+      <div class="exhibit fragment lit"><div class="no">Exhibit 03</div><div class="err">Connection refused :5432</div><p>Postgres only listened on localhost. <b>Usually exactly what you want.</b></p></div>
+      <div class="exhibit fragment lit"><div class="no">Exhibit 04</div><div class="err">no pg_hba.conf entry for host</div><p>The app called the server by its network address. <b>Use 127.0.0.1.</b></p></div>
+      <div class="exhibit fragment lit"><div class="no">Exhibit 05</div><div class="err">'/var/log/gunicorn/…' isn't writable</div><p>The log folder didn't exist. 36 restarts later… <b>LogsDirectory= fixed it.</b></p></div>
+      <div class="exhibit fragment lit"><div class="no">Exhibit 06</div><div class="err">ERR_TOO_MANY_REDIRECTS</div><p>Django didn't know nginx had already done HTTPS. <b>Send X-Forwarded-Proto.</b></p></div>
+      <div class="exhibit fragment lit"><div class="no">Exhibit 07</div><div class="err">Missing staticfiles manifest entry</div><p>The built CSS was git-ignored, so it never arrived. <b>Build it, then deploy it.</b></p></div>
+      <div class="exhibit fragment lit"><div class="no">Exhibit 08</div><div class="err">Release file is not valid yet</div><p>The VM's clock was 14 hours behind after the laptop slept. <b>Keep time sync on.</b></p></div>
+    </div>
+  </div>
+  <aside class="notes">
+    [22:30 → 25:00] Every one of these happened while I prepared this talk, on this exact deployment. Step through them quickly; the point is that each one lives at one stop on our route.
+    01 and 02 are DNS and HTTPS. 03 and 04 are the database door. 05 is systemd. 06 is the proxy header: nginx speaks HTTPS to the browser but plain HTTP to gunicorn, so Django kept redirecting to HTTPS forever. 07 is git-ignored build output. 08: my VM slept with my laptop, woke up fourteen hours in the past, and apt refused to update.
+    If you know the route, you know where to look.
+  </aside>
+</section>
+
+<!-- ===================================================================== 28. CI/CD -->
+<section>
+  <div class="wrap">
+    <div class="kicker">CI/CD</div>
+    <h2>Make deploying boring</h2>
+    <div class="pipe" style="margin-top:28px">
+      <div class="step fragment lit"><div class="n">1</div><h3>Push</h3><p>git push to main</p></div>
+      <div class="step fragment lit"><div class="n">2</div><h3>Test</h3><p>CI runs your tests</p></div>
+      <div class="step fragment lit"><div class="n">3</div><h3>Connect</h3><p>SSH to the server</p></div>
+      <div class="step fragment lit"><div class="n">4</div><h3>Update</h3><p>pull + install</p></div>
+      <div class="step fragment lit"><div class="n">5</div><h3>Migrate</h3><p>migrate + collectstatic</p></div>
+      <div class="step fragment lit"><div class="n">6</div><h3>Restart</h3><p>systemctl restart</p></div>
+    </div>
+    <div class="row top" style="margin-top:40px; gap:48px">
+      <div class="frame term" style="width:820px; flex:none">
+        <div class="bar"><i></i><i></i><i></i><span>deploy.sh</span></div>
+        <pre style="border:0; border-radius:0"><code class="language-bash" data-trim>
+git pull
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py collectstatic --noinput
+sudo systemctl restart gunicorn-pycon
+        </code></pre>
+      </div>
+      <p class="grow muted small" style="margin:0">Run it by hand first. When it's boring, let <strong>GitHub Actions</strong>, or the panel's <strong>Git webhook</strong>, run it on every push.</p>
+    </div>
+  </div>
+  <aside class="notes">
+    [25:00 → 26:15] CI/CD sounds big, but a deploy is the commands you've already run, in order. Put them in a script. Run it by hand until it's boring.
+    Then have your CI run your tests, SSH in, and run the script. Boring deploys are good deploys.
+  </aside>
+</section>
+
+<!-- ===================================================================== 29. WORKERS -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Background tasks</div>
+    <h2>A worker is just another service</h2>
+    <div class="row" style="margin-top:30px; gap:30px; align-items:stretch">
+      <div class="card accent" style="width:390px; flex:none"><div class="icon gold"><svg><use href="#i-play"/></svg></div><p class="tiny" style="font-family:var(--mono); color:var(--sun); margin-bottom:10px">gunicorn-pycon.service</p><h3>Web</h3><p>Answers requests, queues slow jobs</p></div>
+      <div style="display:grid; place-items:center; font:700 1.4em/1 var(--head); color:var(--sun)">⇄</div>
+      <div class="card" style="width:270px; flex:none; text-align:center"><div class="icon red" style="margin:0 auto 18px"><svg><use href="#i-db"/></svg></div><h3>Queue</h3><p>Redis or PostgreSQL</p></div>
+      <div style="display:grid; place-items:center; font:700 1.4em/1 var(--head); color:var(--sun)">⇄</div>
+      <div class="card good fragment" style="width:390px; flex:none"><div class="icon green"><svg><use href="#i-cog"/></svg></div><p class="tiny" style="font-family:var(--mono); color:var(--leaf); margin-bottom:10px">worker-pycon.service</p><h3>Worker</h3><p>Sends the emails, resizes the images</p></div>
+    </div>
+    <p class="fragment" style="margin-top:46px">Same code. Same <code>.env</code>. Same systemd recipe. <strong>Copy the unit file and change one line.</strong></p>
+    <div class="chips fragment" style="margin-top:6px"><span class="chip"><i></i>Celery</span><span class="chip"><i style="background:var(--sky)"></i>RQ</span><span class="chip"><i style="background:var(--sun)"></i>Dramatiq</span><span class="chip"><i style="background:var(--flame)"></i>Huey</span><span class="chip"><i style="background:var(--py)"></i>Django 6 tasks</span></div>
+  </div>
+  <aside class="notes">
+    [26:15 → 27:15] Async workers sound scary but they're one more process. The web app puts a job on a queue; a worker takes it off and does it.
+    In production that's a second systemd unit: same code, same .env, different command. Celery, RQ, Dramatiq, Huey or Django's own tasks framework; the deployment pattern is identical.
+  </aside>
+</section>
+
+<!-- ===================================================================== 30. CHECKLIST -->
+<section>
+  <div class="wrap">
+    <div class="kicker">Take this home</div>
+    <h2>The production checklist</h2>
+    <ul class="checks" style="margin-top:28px">
+      <li>Settings split: base, development, production</li>
+      <li>Secrets in the environment, never in git</li>
+      <li>DEBUG off, ALLOWED_HOSTS set</li>
+      <li>Database only reachable from inside</li>
+      <li>gunicorn on 127.0.0.1, behind nginx</li>
+      <li>systemd restarts it, and starts it on boot</li>
+      <li>HTTPS forced, certificates auto-renew</li>
+      <li>Static files fingerprinted and compressed</li>
+      <li>One deploy script, run by CI</li>
+      <li>Backups, and you've tested a restore</li>
+    </ul>
+  </div>
+  <aside class="notes">
+    [27:15 → 28:00] Photograph this slide. If you can tick all ten, you have a production deployment. Notice none of them mention a cloud provider.
+    The last one is the one everybody skips: a backup you've never restored is a hope, not a backup.
+  </aside>
+</section>
+
+<!-- ===================================================================== 31. ANY CLOUD -->
+<section>
+  <div class="wrap center-x">
+    <h1 style="font-size:3.2em">Any cloud.<br><span class="grad">Same blocks.</span></h1>
+    <p class="lede" style="margin:0 auto">Learn the building blocks once. The dashboard is just paint.</p>
+  </div>
+  <aside class="notes">[28:00 → 28:30] Whether it's AWS, Azure, DigitalOcean, Hetzner or a VM on your laptop: Ubuntu, DNS, a firewall, nginx, HTTPS, gunicorn, systemd, environment variables, a database, CI/CD.</aside>
+</section>
+
+<!-- ===================================================================== 32. THANK YOU -->
+<section>
+  <div class="wrap">
+    <div class="row" style="gap:80px">
+      <div class="grow">
+        <div class="kicker">Thank you</div>
+        <h1 style="font-size:3.3em">Questions?</h1>
+        <p style="font: 600 1em/1.3 var(--head); color:#fff; margin-bottom:6px">Shaun De Ponte</p>
+        <p class="muted small" style="margin-bottom:26px">NaughtyBean Consulting</p>
+        <p class="small"><a href="https://github.com/NaughtyBeanConsulting/PyConZA2026">github.com/NaughtyBeanConsulting/PyConZA2026</a></p>
+        <p class="small"><a href="https://za.pycon.org">za.pycon.org</a></p>
+      </div>
+      <div style="text-align:center">
+        <div class="qr"><img src="img/repo-qr.svg" alt="QR code linking to the GitHub repository for this talk"></div>
+        <p class="shot-caption">The code from this talk</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">[28:30 → 30:00] Thank you! The repo has the demo app and this deck. Happy to take questions.</aside>
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.js"></script>
+<script src="vendor/reveal/plugin/notes/notes.js"></script>
+<script src="vendor/reveal/plugin/zoom/zoom.js"></script>
+<script src="vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="js/deck.js"></script>
+</body>
+</html>
